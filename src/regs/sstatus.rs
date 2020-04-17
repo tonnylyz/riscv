@@ -1,3 +1,4 @@
+use register::cpu::RegisterWriteOnly;
 use register::cpu::RegisterReadWrite;
 
 register_bitfields! {u64,
@@ -20,10 +21,22 @@ register_bitfields! {u64,
 }
 
 pub struct Reg;
+pub struct RegSet;
+pub struct RegClear;
 
 impl RegisterReadWrite<u64, SSTATUS::Register> for Reg {
   sys_csr_read_raw!(u64, "SSTATUS");
   sys_csr_write_raw!(u64, "SSTATUS");
 }
 
+impl RegisterWriteOnly<u64, SSTATUS::Register> for RegSet {
+  sys_csr_set_raw!(u64, "SSTATUS");
+}
+
+impl RegisterWriteOnly<u64, SSTATUS::Register> for RegClear {
+  sys_csr_clear_raw!(u64, "SSTATUS");
+}
+
 pub static SSTATUS: Reg = Reg {};
+pub static SSTATUS_SET: RegSet = RegSet {};
+pub static SSTATUS_CLEAR: RegClear = RegClear {};
