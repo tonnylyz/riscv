@@ -1,5 +1,5 @@
 #![no_std]
-#![feature(asm)]
+#![feature(llvm_asm)]
 #![feature(custom_inner_attributes)]
 #![feature(core_intrinsics)]
 
