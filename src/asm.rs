@@ -8,14 +8,12 @@
 
 //! Miscellaneous assembly instructions
 
-use core;
-
 /// The classic no-op
 #[inline(always)]
 pub fn nop() {
   match () {
     #[cfg(target_arch = "riscv64")]
-    () => unsafe { llvm_asm!("nop" :::: "volatile") },
+    () => unsafe { asm!("nop") },
 
     #[cfg(not(target_arch = "riscv64"))]
     () => unimplemented!(),
@@ -27,7 +25,7 @@ pub fn nop() {
 pub fn wfi() {
   match () {
     #[cfg(target_arch = "riscv64")]
-    () => unsafe { llvm_asm!("wfi" :::: "volatile") },
+    () => unsafe { asm!("wfi") },
 
     #[cfg(not(target_arch = "riscv64"))]
     () => unimplemented!(),
@@ -42,8 +40,7 @@ pub fn eret() -> ! {
   match () {
     #[cfg(target_arch = "riscv64")]
     () => unsafe {
-      llvm_asm!("eret" :::: "volatile");
-      core::intrinsics::unreachable()
+      asm!("eret", options(noreturn))
     },
 
     #[cfg(not(target_arch = "riscv64"))]
@@ -59,8 +56,7 @@ pub fn ret() -> ! {
   match () {
     #[cfg(target_arch = "riscv64")]
     () => unsafe {
-      llvm_asm!("ret" :::: "volatile");
-      core::intrinsics::unreachable()
+      asm!("ret", options(noreturn))
     },
 
     #[cfg(not(target_arch = "riscv64"))]

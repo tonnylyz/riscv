@@ -17,7 +17,7 @@ macro_rules! sys_csr_read_raw {
                 () => {
                     let reg;
                     unsafe {
-                        llvm_asm!(concat!("csrrs", " $0, ", $csr_name, ", x0") : "=r"(reg) ::: "volatile");
+                        asm!(concat!("csrrs {}, ", $csr_name, ", x0"), out(reg) reg, options(nomem, nostack));
                     }
                     reg
                 }
@@ -40,7 +40,7 @@ macro_rules! sys_csr_write_raw {
                 #[cfg(target_arch = "riscv64")]
                 () => {
                     unsafe {
-                        llvm_asm!(concat!("csrrw", " x0, ", $csr_name, ", $0") :: "r"(value) :: "volatile")
+                        asm!(concat!("csrrw x0, ", $csr_name, ", {}"), in(reg) value, options(nomem, nostack))
                     }
                 }
 
@@ -61,7 +61,7 @@ macro_rules! sys_csr_set_raw {
             match () {
                 #[cfg(target_arch = "riscv64")]
                 () => unsafe {
-                    llvm_asm!(concat!("csrrs", " x0, ", $csr_name, ", $0") :: "r"(value) :: "volatile")
+                    asm!(concat!("csrrs x0, ", $csr_name, ", {}"), in(reg) value, options(nomem, nostack))
                 },
 
                 #[cfg(not(target_arch = "riscv64"))]
@@ -81,7 +81,7 @@ macro_rules! sys_csr_clear_raw {
             match () {
                 #[cfg(target_arch = "riscv64")]
                 () => unsafe {
-                    llvm_asm!(concat!("csrrc", " x0, ", $csr_name, ", $0") :: "r"(value) :: "volatile")
+                    asm!(concat!("csrrc x0, ", $csr_name, ", {}"), in(reg) value, options(nomem, nostack))
                 },
 
                 #[cfg(not(target_arch = "riscv64"))]
