@@ -1,5 +1,7 @@
-use register::cpu::RegisterWriteOnly;
-use register::cpu::RegisterReadWrite;
+use tock_registers::{
+  register_bitfields,
+  interfaces::{Readable, Writeable}
+};
 
 register_bitfields! {u64,
   pub SSTATUS [
@@ -24,16 +26,26 @@ pub struct Reg;
 pub struct RegSet;
 pub struct RegClear;
 
-impl RegisterReadWrite<u64, SSTATUS::Register> for Reg {
+impl Readable for Reg {
+  type T = u64;
+  type R = SSTATUS::Register;
   sys_csr_read_raw!(u64, "SSTATUS");
+}
+impl Writeable for Reg {
+  type T = u64;
+  type R = SSTATUS::Register;
   sys_csr_write_raw!(u64, "SSTATUS");
 }
 
-impl RegisterWriteOnly<u64, SSTATUS::Register> for RegSet {
+impl Writeable for RegSet {
+  type T = u64;
+  type R = SSTATUS::Register;
   sys_csr_set_raw!(u64, "SSTATUS");
 }
 
-impl RegisterWriteOnly<u64, SSTATUS::Register> for RegClear {
+impl Writeable for RegClear {
+  type T = u64;
+  type R = SSTATUS::Register;
   sys_csr_clear_raw!(u64, "SSTATUS");
 }
 

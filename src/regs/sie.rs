@@ -1,4 +1,8 @@
-use register::cpu::RegisterReadWrite;
+use tock_registers::{
+  interfaces::{Readable, Writeable},
+  register_bitfields,
+};
+
 // sie is the corresponding SXLEN-bit read/write register containing interrupt enable bits
 register_bitfields! {u64,
   pub SIE [
@@ -13,8 +17,15 @@ register_bitfields! {u64,
 
 pub struct Reg;
 
-impl RegisterReadWrite<u64, SIE::Register> for Reg {
+impl Readable for Reg {
+  type T = u64;
+  type R = SIE::Register;
   sys_csr_read_raw!(u64, "SIE");
+}
+
+impl Writeable for Reg {
+  type T = u64;
+  type R = SIE::Register;
   sys_csr_write_raw!(u64, "SIE");
 }
 

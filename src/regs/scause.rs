@@ -1,4 +1,7 @@
-use register::cpu::RegisterReadOnly;
+use tock_registers::{
+  interfaces::Readable,
+  register_bitfields
+};
 
 register_bitfields! {u64,
   pub SCAUSE [
@@ -49,7 +52,9 @@ register_bitfields! {u64,
 
 pub struct Reg;
 
-impl RegisterReadOnly<u64, SCAUSE::Register> for Reg {
+impl Readable for Reg {
+  type T = u64;
+  type R = SCAUSE::Register;
   sys_csr_read_raw!(u64, "SCAUSE");
 }
 

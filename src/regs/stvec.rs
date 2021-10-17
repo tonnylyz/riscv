@@ -1,4 +1,7 @@
-use register::cpu::RegisterReadWrite;
+use tock_registers::{
+  interfaces::{Readable, Writeable},
+  register_bitfields
+};
 
 register_bitfields! {u64,
   pub STVEC [
@@ -12,8 +15,15 @@ register_bitfields! {u64,
 
 pub struct Reg;
 
-impl RegisterReadWrite<u64, STVEC::Register> for Reg {
+impl Readable for Reg {
+  type T = u64;
+  type R = STVEC::Register;
   sys_csr_read_raw!(u64, "STVEC");
+}
+
+impl Writeable for Reg {
+  type T = u64;
+  type R = STVEC::Register;
   sys_csr_write_raw!(u64, "STVEC");
 }
 

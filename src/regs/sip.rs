@@ -1,4 +1,8 @@
-use register::cpu::RegisterReadWrite;
+use tock_registers::{
+  interfaces::{Readable, Writeable},
+  register_bitfields
+};
+
 //  sip register is an SXLEN-bit read/write register containing information on pending interrupts
 register_bitfields! {u64,
   pub SIP [
@@ -13,8 +17,15 @@ register_bitfields! {u64,
 
 pub struct Reg;
 
-impl RegisterReadWrite<u64, SIP::Register> for Reg {
+impl Readable for Reg {
+  type T = u64;
+  type R = SIP::Register;
   sys_csr_read_raw!(u64, "SIP");
+}
+
+impl Writeable for Reg {
+  type T = u64;
+  type R = SIP::Register;
   sys_csr_write_raw!(u64, "SIP");
 }
 
