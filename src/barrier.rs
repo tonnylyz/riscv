@@ -4,7 +4,7 @@ pub fn sfence_vma_all() {
   match () {
     #[cfg(target_arch = "riscv64")]
     () => unsafe {
-      asm!("sfence.vma")
+      core::arch::asm!("sfence.vma")
     },
 
     #[cfg(not(target_arch = "riscv64"))]
@@ -17,7 +17,7 @@ pub fn sfence_vma(asid: usize, addr: usize) {
   match () {
     #[cfg(target_arch = "riscv64")]
     () => unsafe {
-      asm!("sfence.vma {0}, {1}", in(reg) asid, in(reg) addr)
+      core::arch::asm!("sfence.vma {0}, {1}", in(reg) asid, in(reg) addr)
     },
 
     #[cfg(not(target_arch = "riscv64"))]

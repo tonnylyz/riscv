@@ -13,7 +13,7 @@
 pub fn nop() {
   match () {
     #[cfg(target_arch = "riscv64")]
-    () => unsafe { asm!("nop") },
+    () => unsafe { core::arch::asm!("nop") },
 
     #[cfg(not(target_arch = "riscv64"))]
     () => unimplemented!(),
@@ -25,7 +25,7 @@ pub fn nop() {
 pub fn wfi() {
   match () {
     #[cfg(target_arch = "riscv64")]
-    () => unsafe { asm!("wfi") },
+    () => unsafe { core::arch::asm!("wfi") },
 
     #[cfg(not(target_arch = "riscv64"))]
     () => unimplemented!(),
@@ -40,7 +40,7 @@ pub fn eret() -> ! {
   match () {
     #[cfg(target_arch = "riscv64")]
     () => unsafe {
-      asm!("eret", options(noreturn))
+      core::arch::asm!("eret", options(noreturn))
     },
 
     #[cfg(not(target_arch = "riscv64"))]
@@ -56,7 +56,7 @@ pub fn ret() -> ! {
   match () {
     #[cfg(target_arch = "riscv64")]
     () => unsafe {
-      asm!("ret", options(noreturn))
+      core::arch::asm!("ret", options(noreturn))
     },
 
     #[cfg(not(target_arch = "riscv64"))]
