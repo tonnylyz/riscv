@@ -11,6 +11,7 @@ mod sepc;
 mod sscratch;
 mod stvec;
 mod time;
+mod fcsr;
 
 pub use self::satp::SATP;
 pub use self::scause::SCAUSE;
@@ -24,3 +25,4 @@ pub use self::sepc::SEPC;
 pub use self::sscratch::SSCRATCH;
 pub use self::stvec::STVEC;
 pub use self::time::TIME;
+pub use self::fcsr::FCSR;
